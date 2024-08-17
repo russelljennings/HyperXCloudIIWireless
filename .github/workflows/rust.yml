@@ -15,7 +15,7 @@ jobs:
   build-macos:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.1.7
       - name: Build
         run: cargo build --verbose --bin cli_app
       - name: Test
@@ -23,15 +23,15 @@ jobs:
       - name: Package
         run: cargo build --release --bin cli_app
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4.3.6
         with:
           name: cli_app-macos
-          path: target/release
+          path: target/release/cli_app-macos
 
   build-linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.1.7
       - name: Install Dependencies
         run: sudo apt update && sudo apt install -y libdbus-1-dev libhidapi-dev libusb-1.0-0-dev libudev-dev
       - name: Build
@@ -41,10 +41,10 @@ jobs:
       - name: Package
         run: cargo build --release --bin cli_app
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4.3.6
         with:
           name: cli_app-linux
-          path: target/release
+          path: target/release/cli_app-linux
 
   create-release:
     needs: [build-macos, build-linux]
