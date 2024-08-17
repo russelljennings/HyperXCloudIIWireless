@@ -26,7 +26,7 @@ jobs:
         uses: actions/upload-artifact@v4.3.6
         with:
           name: cli_app-macos
-          path: ./target/release/cli_app-macos
+          path: cli_app-macos
 
   build-linux:
     runs-on: ubuntu-latest
@@ -44,13 +44,24 @@ jobs:
         uses: actions/upload-artifact@v4.3.6
         with:
           name: cli_app-linux
-          path: ./target/release/cli_app-linux
+          path: cli_app-linux
 
   create-release:
     needs: [build-macos, build-linux]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Download macOS artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: cli_app-macos
+          path: .
+          
+      - name: Download Linux artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: cli_app-linux
+          path: .
+    
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
@@ -61,21 +72,23 @@ jobs:
           release_name: Release ${{ github.sha }}
           draft: false
           prerelease: false
+          
       - name: Upload macOS Binary
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/release/cli_app-macos
+          asset_path: cli_app-macos
           asset_name: cli_app-macos
           asset_content_type: application/octet-stream
+          
       - name: Upload Linux Binary
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/release/cli_app-linux
+          asset_path: cli_app-linux
           asset_name: cli_app-linux
           asset_content_type: application/octet-stream
