@@ -1,6 +1,8 @@
 # HyperXCloudIIWireless
 A CLI and tray application to monitor HyperX Cloud II Wireless headset battery level.
 
+**Hopefully I can get this to support the Cloud Core I have... - Russell**
+
 <img src=./screenshots/tray_app.png alt="tray_app" width="400">
 
 ## Compatibility
